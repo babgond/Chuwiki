@@ -78,8 +78,7 @@ Non bloquants, mais nettoyés par cohérence et pour anticiper PHP 9 :
 
 ## Validation effectuée
 
-Tests réels de bout en bout avec un serveur PHP 8.3.6 (`php -S`), pas
-seulement une analyse statique du code :
+Tests réels de bout en bout avec un serveur PHP 8.3.6 (`php -S`) :
 - Affichage d'une page existante et d'une page inexistante (`wiki.php`)
 - Formulaire d'édition (`edit.php` en GET)
 - Sauvegarde d'une page avec accents et wiki-syntaxe (`edit.php` en POST)
