@@ -1,4 +1,4 @@
-# Correctifs de compatibilité PHP 8.3 — ChuWiki 3.0
+# Correctifs de compatibilité PHP 8.3 — ChuWiki 3.0 par babgond
 
 Ce patch corrige tout ce qui empêchait ChuWiki 2.0 de fonctionner sous PHP 8.x.
 Testé avec PHP 8.3.6. Tous les fichiers passent `php -l` sans erreur, et les
