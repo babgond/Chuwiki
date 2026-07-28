@@ -365,7 +365,7 @@ class wiki2xhtmlBasic
 		$this->tag_pattern = $this->__getTagsPattern();
 		
 		$this->escape_table = $this->all_tags;
-		array_walk($this->escape_table,create_function('&$a','$a = \'\\\\\'.$a;'));
+		array_walk($this->escape_table, function(&$a){ $a = '\\'.$a; });
 	}
 	
 	function __getTags($open=true)
@@ -390,7 +390,7 @@ class wiki2xhtmlBasic
 	function __getTagsPattern($escape=false)
 	{
 		$res = $this->all_tags;
-		array_walk($res,create_function('&$a','$a = preg_quote($a,"/");'));
+		array_walk($res, function(&$a){ $a = preg_quote($a,"/"); });
 		
 		if (!$escape) {
 			return '/(?<!\\\)('.implode('|',$res).')/';
@@ -804,8 +804,8 @@ class wiki2xhtmlBasic
 			# On ajoute les dimensions de l'image si locale
 			# Idée de Stephanie
 			$img_size = NULL;
-			if (!ereg('[a-zA-Z]+://', $url)) {
-				if (ereg('^/',$url)) {
+			if (!preg_match('/[a-zA-Z]+:\/\//', $url)) {
+				if (preg_match('/^\//', $url)) {
 					$path_img = $_SERVER['DOCUMENT_ROOT'] . $url;
 				} else {
 					$path_img = $url;

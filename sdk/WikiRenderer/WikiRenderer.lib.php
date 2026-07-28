@@ -51,7 +51,7 @@ class WikiTag {
     /**
     * @param WikiRendererConfig $config
     */
-    function WikiTag(&$config){
+    function __construct(&$config){
         $this->config = & $config;
         $this->checkWikiWordFunction=$config->checkWikiWordFunction;
         if($config->checkWikiWordFunction === null) $this->checkWikiWordIn=array();
@@ -233,7 +233,7 @@ class WikiInlineParser {
     * @param   array    $inlinetags liste des tags permis
     * @param   string   caractère séparateur des différents composants d'un tag wiki
     */
-    function WikiInlineParser(&$config){
+    function __construct(&$config){
 
         $separators = array();
         $this->escapeChar = '\\';
@@ -400,7 +400,7 @@ class WikiRendererBloc {
     * @param WikiRender    $wr   l'objet moteur wiki
     * @abstract
     */
-   function WikiRendererBloc(&$wr){
+   function __construct(&$wr){
       $this->engine = &$wr;
    }
 
@@ -542,7 +542,7 @@ class WikiRenderer {
    /**
     * instancie les différents objets pour le rendu des elements inline et bloc.
     */
-   function WikiRenderer( $config=null){
+   function __construct( $config=null){
 
       if(is_string($config)){
           $f = WIKIRENDERER_PATH.'rules/'.basename($config).'.php';
@@ -559,7 +559,7 @@ class WikiRenderer {
          $this->config= new wr3_to_xhtml();
       }
 
-      $this->inlineParser =& new WikiInlineParser($this->config);
+      $this->inlineParser = new WikiInlineParser($this->config);
 
       foreach($this->config->bloctags as $name){
          $this->_blocList[]= new $name($this);

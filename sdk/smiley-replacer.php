@@ -93,13 +93,14 @@ function MakeImageSmileys($wiki, &$strContent)
 // $str = $sr->Replace(":) E-)");
 
 // Classe utilitaire pour CSmileyReplacer
+#[\AllowDynamicProperties]
 class CClosestFinder
 {
 	var $m_strContent;
 	var $m_astrPatterns;
 	var $m_nAdvance;
 
-	function CClosestFinder($strContent, $astrPatterns)
+	function __construct($strContent, $astrPatterns)
 	{
 		$this->m_strContent = $strContent;
 		$this->m_astrPatterns = $astrPatterns;
@@ -172,7 +173,7 @@ class CSmileyReplacer
 
 	// Retourne null si erreur
 	// Si $bUtf est à false, alors on considère qu'on est en latin-9, latin-1 ou windows-1252
-	function CSmileyReplacer($aReplacements, $bUtf8, $strBaseDir = '')
+	function __construct($aReplacements, $bUtf8, $strBaseDir = '')
 	{
 		/////////////////////////////////////////////////////////////////////////
 		// Crée les tableaux des caractères autorisés avant et après

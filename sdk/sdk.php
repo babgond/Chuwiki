@@ -24,8 +24,9 @@
 
 error_reporting(E_ALL);
 
-define('CHUWIKI_VERSION', 'ChuWiki 2.1');
+define('CHUWIKI_VERSION', 'ChuWiki 3.0');
 
+#[\AllowDynamicProperties]
 class ChuWiki
 {
 	const EXTENSION_COMPRESSED = 'gz';
@@ -33,7 +34,7 @@ class ChuWiki
 	
 	static $s_instance;
 
-	function ChuWiki()
+	function __construct()
 	{
 		$pathHome = dirname(__FILE__) . '/..';
 		$this->m_aConfig = $this->ParseIniFile($pathHome . '/configuration.ini');
@@ -71,7 +72,7 @@ class ChuWiki
 		}
 	}
 	
-	/* static */ function Instance()
+	static function Instance()
 	{
 		if ( ChuWiki::$s_instance == null ) 
 		{
@@ -181,7 +182,11 @@ class ChuWiki
 	function GetPostedValue($strName)
 	{
 		$strValue = @$_POST[$strName];
-		if ( get_magic_quotes_gpc() )
+		if ( $strValue === null )
+		{
+			$strValue = '';
+		}
+		if ( function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() )
 		{
 			$strValue = stripslashes($strValue);
 		}
@@ -252,7 +257,7 @@ class ChuWiki
 		$strScript = $aInfo['Script'];
 
 		// Gestion de magic_quotes
-		if ( get_magic_quotes_gpc() )
+		if ( function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() )
 		{
 			$strPage = stripslashes($strPage);
 		}
@@ -465,7 +470,8 @@ class ChuWiki
 	{
 		$strPageDir = $this->GetPageDir($strPage);
 		$strDateLatestFilePath = $this->GetLatestDateFilePath($strPageDir);
-		$strDateLatest = @implode('', file($strDateLatestFilePath));
+		$aDateLatestLines = @file($strDateLatestFilePath);
+		$strDateLatest = ( $aDateLatestLines !== false ) ? implode('', $aDateLatestLines) : '';
 
 		// Si le cache n'existe pas ou que la page indiquée a été supprimée
 		// On va devoir recréer le cache
@@ -785,7 +791,7 @@ class ChuWiki
 		if( $this->IsSpam($strWikiContent, 
 							$_SERVER['REMOTE_ADDR'], 
 							$_SERVER['HTTP_USER_AGENT'], 
-							$_SERVER['HTTP_REFERER']) )
+							$_SERVER['HTTP_REFERER'] ?? '') )
 		{
 			$this->Error('Cette modification semble contenir du contenu indésirable.'
 						.' Veuillez le modifier et recommencer.');
